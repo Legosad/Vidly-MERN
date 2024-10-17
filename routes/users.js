@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const { Users, validateUsers } = require("../models/users");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 //Get All
 
 router.get("/", async (req, res) => {
@@ -37,7 +38,8 @@ router.post("/", async (req, res) => {
   });
   user = await user.save();
   const { _id, username, name } = user;
-  res.send({ _id, username, name });
+  const token = jwt.sign({ _id, name }, "jwtPrivateKey");
+  res.send({ _id, username, name, token });
 });
 
 //Update a user by ID

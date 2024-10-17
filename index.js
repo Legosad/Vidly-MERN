@@ -17,7 +17,7 @@ app.use(express.json());
 app.use("/api/genres", genres);
 app.use("/api/movies", movies);
 app.use("/api/users", users); // Add users route
-app.use("/api/auth", users); // Add auth route
+app.use("/api/auth", auth); // Add auth route
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening to port ${port}...`));

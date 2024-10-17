@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const { Movie, validate } = require("../models/movies.js");
+const auth = require("../middleware/auth.js");
+const admin = require("../middleware/admin.js");
 
 // Get all movies
 router.get("/", async (req, res) => {
@@ -25,7 +27,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // Create a new movie
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -42,7 +44,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a movie by ID
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, admin, async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -66,7 +68,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a movie by ID
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, admin, async (req, res) => {
   const param = req.params.id;
   const movie = await Movie.findByIdAndDelete(param);
   if (!movie) {
